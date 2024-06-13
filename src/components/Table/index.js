@@ -4,16 +4,23 @@ import useTable from "../../hooks/useTable";
 import styles from "./Table.module.css";
 import TableFooter from "./TableFooter";
 import { PlaceContext } from "../../context";
+import loader from '../../assets/loader.webp'
 
-const Table = ({ data, rowsPerPage }) => {
+const Table = ({ rowsPerPage }) => {
 
     const { queryCtx } = useContext(PlaceContext);
-
     const [page, setPage] = useState(1);
-    const { slice, range } = useTable(data, page, rowsPerPage);
+    const { slice, range } = useTable(queryCtx?.tableData ?? [], page, rowsPerPage);
+
     return (
         <>
             <table className={styles.table}>
+                {queryCtx?.isLoading && <img src={loader} alt="loading..." />}
+
+                {
+                    !queryCtx?.isLoading && !queryCtx?.name ? <p>Start Searching</p> : !queryCtx?.isLoading && queryCtx?.tableData?.length == 0 ? <p>No Result Found</p> : null
+                }
+
                 <thead className={styles.tableRowHeader}>
                     <tr>
                         <th className={styles.tableHeader}>#</th>
@@ -22,11 +29,11 @@ const Table = ({ data, rowsPerPage }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {slice.map((el) => (
+                    {!queryCtx?.isLoading && slice.map((el) => (
                         <tr className={styles.tableRowItems} key={el.id}>
                             <td className={styles.tableCell}>{el.name}</td>
-                            <td className={styles.tableCell}>{el.capital}</td>
-                            <td className={styles.tableCell}>{el.language}</td>
+                            <td className={styles.tableCell}>{el.name}</td>
+                            <td className={styles.tableCell}><img src={`https://flagsapi.com/${el.countryCode}/shiny/32.png`} /></td>
                         </tr>
                     ))}
                 </tbody>
