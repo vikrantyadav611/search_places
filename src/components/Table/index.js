@@ -31,7 +31,7 @@ const Table = ({ rowsPerPage }) => {
                 <tbody>
                     {!queryCtx?.isLoading && slice.map((el) => (
                         <tr className={styles.tableRowItems} key={el.id}>
-                            <td className={styles.tableCell}>{el.name}</td>
+                            <td className={styles.tableCell}>{queryCtx?.tableData?.map(e => e?.id)?.indexOf(el?.id) + 1}</td>
                             <td className={styles.tableCell}>{el.name}</td>
                             <td className={styles.tableCell}><img src={`https://flagsapi.com/${el.countryCode}/shiny/32.png`} /></td>
                         </tr>
